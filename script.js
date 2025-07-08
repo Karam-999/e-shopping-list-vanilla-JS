@@ -1,6 +1,8 @@
 const input = document.getElementById('item-input');
 const form = document.getElementById('item-form');
 const list = document.getElementById('item-list');
+console.log(list.childElementCount);
+const filter = document.querySelector('#filter');
 
 f1 = (e) => {
   e.preventDefault();
@@ -9,6 +11,7 @@ f1 = (e) => {
 
   if (input.value === '') {
     alert('Please enter the Item');
+    return;
   }
 
   const buttonn = f2('remove-item btn-link text-red');
@@ -16,6 +19,7 @@ f1 = (e) => {
   console.log(liist);
 
   list.appendChild(liist);
+  checkUI();
 };
 const f2 = (classes) => {
   const buttonnn = document.createElement('button');
@@ -34,10 +38,12 @@ form.addEventListener('submit', f1);
 
 ///remove individual items(event delegation)
 list.addEventListener('click', (e) => {
-  e.target.classList.contains('fa-xmark')
-    ? e.target.parentElement.parentElement.remove()
-    : null;
-  // console.log(e.currentTarget);
+  if (confirm('Are you Sure You want to delete this item?')) {
+    e.target.classList.contains('fa-xmark')
+      ? e.target.parentElement.parentElement.remove()
+      : null;
+  }
+  checkUI();
 });
 
 const clearAll = document.querySelector('.btn-clear');
@@ -45,8 +51,23 @@ clearAll.addEventListener('click', (e) => {
   while (list.firstChild) {
     list.removeChild(list.firstChild);
   }
+  checkUI();
   //or
   // e.target.classList.contains('btn-clear')
   // ? document.querySelector('ul').remove() // or list.innerHTML = ''
   // : null;
 });
+
+//remove filter section and clear all button when no items
+
+checkUI = () => {
+  // const list = document.getElementById('item-list');
+  if (list.childElementCount === 0) {
+    clearAll.style.display = 'none';
+    filter.style.display = 'none';
+  } else {
+    clearAll.style.display = 'block';
+    filter.style.display = 'block';
+  }
+};
+checkUI();
