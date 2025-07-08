@@ -1,7 +1,9 @@
 const input = document.getElementById('item-input');
 const form = document.getElementById('item-form');
 const list = document.getElementById('item-list');
-console.log(list.childElementCount);
+console.log(list);
+// const items = document.querySelectorAll('li');
+// console.log(items);
 const filter = document.querySelector('#filter');
 
 f1 = (e) => {
@@ -71,3 +73,22 @@ checkUI = () => {
   }
 };
 checkUI();
+console.log('hi');
+const filter1 = (e) => {
+  const items = list.querySelectorAll('li'); //works only if the items is defined here and not outside the function because it is a dynamic list
+  const text = e.target.value.toLowerCase();
+  items.forEach((li) => {
+    const itemName = li.textContent.toLowerCase();
+    console.log(itemName);
+    if (itemName.indexOf(text) != -1) {
+      //indexOf returns -1 if the text is not found
+      console.log(true);
+      li.style.display = 'flex';
+    } else {
+      console.log(false);
+      li.style.display = 'none';
+    }
+  });
+};
+
+filter.addEventListener('input', filter1);
