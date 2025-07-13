@@ -118,6 +118,7 @@ header h1 {
 
 .items {
   margin-top: 20px;
+  width: 500px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -125,7 +126,7 @@ header h1 {
 .items li {
   display: flex;
   justify-content: space-between;
-  width: 45%;
+  width: 450px;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px 15px;

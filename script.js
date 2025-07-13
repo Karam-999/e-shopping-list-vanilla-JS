@@ -6,23 +6,85 @@ console.log(list);
 // console.log(items);
 const filter = document.querySelector('#filter');
 
-f1 = (e) => {
+const displayTheItems = () => {
+  const localstorageVar = getItemsFromLocalStorage();
+  localstorageVar.forEach((item) => addItemToTheDOM(item));
+  checkUI();
+};
+const onSubmit = (e) => {
   e.preventDefault();
-  const liist = document.createElement('li');
-  liist.innerText = input.value;
+  const item = input.value;
 
-  if (input.value === '') {
+  if (item === '') {
     alert('Please enter the Item');
     return;
   }
+
+  //runs addItemToTheDOM function which adds the item to the DOM
+  addItemToTheDOM(item);
+
+  // runs addItemToLocalStorage function which adds the item to the local storage
+  addItemToLocalStorage(item);
+  checkUI();
+};
+
+addItemToTheDOM = (item) => {
+  const liist = document.createElement('li');
+  liist.innerText = item;
+
+  // if (item === '') {//////this will alert everytime the page is refreshed
+  //   alert('Please enter the Item');
+  //   return;
+  // }
 
   const buttonn = f2('remove-item btn-link text-red');
   liist.appendChild(buttonn);
   console.log(liist);
 
   list.appendChild(liist);
-  checkUI();
 };
+
+addItemToLocalStorage = (item) => {
+  const localstorageVar = getItemsFromLocalStorage();
+
+  //add new item to array
+  localstorageVar.push(item);
+
+  //convert to json string and set to local storage
+  localStorage.setItem('items', JSON.stringify(localstorageVar));
+};
+
+getItemsFromLocalStorage = () => {
+  let localstorageVar;
+
+  if (localStorage.getItem('items') === null) {
+    localstorageVar = [];
+  } else {
+    localstorageVar = JSON.parse(localStorage.getItem('items'));
+  }
+  return localstorageVar;
+};
+
+///remove individual items(event delegation)
+function itemRemove(e) {
+  console.log(e.target.classList.contains('fa-xmark'));
+  if (e.target.classList.contains('fa-xmark'))
+    if (confirm('Are you Sure You want to delete this item?')) {
+      e.target.classList.contains('fa-xmark')
+        ? e.target.parentElement.parentElement.remove()
+        : null;
+    }
+  checkUI();
+}
+
+const clearAll = document.querySelector('.btn-clear');
+const clearAllItems = (e) => {
+  if (e.target.classList.contains('btn-clear')) {
+    list.innerHTML = ''; // Clear all items instead of removing the entire ul
+    checkUI();
+  }
+};
+
 const f2 = (classes) => {
   const buttonnn = document.createElement('button');
   buttonnn.className = classes;
@@ -36,33 +98,9 @@ const f3 = (classes) => {
   return iconn;
 };
 
-form.addEventListener('submit', f1);
-
-///remove individual items(event delegation)
-list.addEventListener('click', (e) => {
-  if (confirm('Are you Sure You want to delete this item?')) {
-    e.target.classList.contains('fa-xmark')
-      ? e.target.parentElement.parentElement.remove()
-      : null;
-  }
-  checkUI();
-});
-
-const clearAll = document.querySelector('.btn-clear');
-clearAll.addEventListener('click', (e) => {
-  while (list.firstChild) {
-    list.removeChild(list.firstChild);
-  }
-  checkUI();
-  //or
-  // e.target.classList.contains('btn-clear')
-  // ? document.querySelector('ul').remove() // or list.innerHTML = ''
-  // : null;
-});
-
 //remove filter section and clear all button when no items
 
-checkUI = () => {
+const checkUI = () => {
   // const list = document.getElementById('item-list');
   if (list.childElementCount === 0) {
     clearAll.style.display = 'none';
@@ -73,8 +111,8 @@ checkUI = () => {
   }
 };
 checkUI();
-console.log('hi');
-const filter1 = (e) => {
+//filtering the items
+const filterItems = (e) => {
   const items = list.querySelectorAll('li'); //works only if the items is defined here and not outside the function because it is a dynamic list
   const text = e.target.value.toLowerCase();
   items.forEach((li) => {
@@ -91,4 +129,12 @@ const filter1 = (e) => {
   });
 };
 
-filter.addEventListener('input', filter1);
+function init() {
+  //Event Listeners
+  form.addEventListener('submit', onSubmit);
+  list.addEventListener('click', itemRemove);
+  clearAll.addEventListener('click', clearAllItems);
+  filter.addEventListener('input', filterItems);
+  document.addEventListener('DOMContentLoaded', displayTheItems);
+}
+init();
