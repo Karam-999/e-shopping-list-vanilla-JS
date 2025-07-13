@@ -65,24 +65,45 @@ getItemsFromLocalStorage = () => {
   return localstorageVar;
 };
 
+onClickItem = (e) => {
+  itemRemove(e.target.parentElement.parentElement);
+};
+
 ///remove individual items(event delegation)
-function itemRemove(e) {
-  console.log(e.target.classList.contains('fa-xmark'));
-  if (e.target.classList.contains('fa-xmark'))
-    if (confirm('Are you Sure You want to delete this item?')) {
-      e.target.classList.contains('fa-xmark')
-        ? e.target.parentElement.parentElement.remove()
-        : null;
+function itemRemove(item) {
+  // console.log(item);
+  // console.log(e.target.classList.contains('fa-xmark'));
+  if (item.parentElement.classList.contains('items'))
+    if (confirm('Are you Sure You want to remove this item?')) {
+      true ? item.remove() : null;
+      //     }
+      //   checkUI();
     }
+  removeItemFromLocaleStorage(item.textContent);
   checkUI();
 }
+removeItemFromLocaleStorage = (item) => {
+  let localstorageVar = getItemsFromLocalStorage();
+  console.log(localstorageVar);
 
+  //filter out items to be removed
+  localstorageVar = localstorageVar.filter((i) => i !== item);
+
+  //reset to local storage
+  localStorage.setItem('items', JSON.stringify(localstorageVar));
+
+  // console.log(e.target.parentElement.parentElement);
+  // if (e.target.classList.contains('fa-xmark')) {
+  //   localStorage.removeItem(e.target.parentElement.parentElement.remove());
+  // }
+};
 const clearAll = document.querySelector('.btn-clear');
 const clearAllItems = (e) => {
   if (e.target.classList.contains('btn-clear')) {
     list.innerHTML = ''; // Clear all items instead of removing the entire ul
     checkUI();
   }
+  localStorage.clear();
 };
 
 const f2 = (classes) => {
@@ -132,7 +153,7 @@ const filterItems = (e) => {
 function init() {
   //Event Listeners
   form.addEventListener('submit', onSubmit);
-  list.addEventListener('click', itemRemove);
+  list.addEventListener('click', onClickItem);
   clearAll.addEventListener('click', clearAllItems);
   filter.addEventListener('input', filterItems);
   document.addEventListener('DOMContentLoaded', displayTheItems);
