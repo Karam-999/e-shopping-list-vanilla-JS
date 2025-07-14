@@ -1,7 +1,8 @@
 const input = document.getElementById('item-input');
 const form = document.getElementById('item-form');
 const list = document.getElementById('item-list');
-console.log(list);
+const addbtn = document.querySelector('.btn');
+// console.log(list);
 // const items = document.querySelectorAll('li');
 // console.log(items);
 const filter = document.querySelector('#filter');
@@ -18,6 +19,16 @@ const onSubmit = (e) => {
   if (item === '') {
     alert('Please enter the Item');
     return;
+  }
+
+  //Check for Edit-Mode
+  if (isEditMode) {
+    const itemBeingEdited = list.querySelector('.edit-mode');
+    removeItemFromLocaleStorage(itemBeingEdited.textContent);
+    itemBeingEdited.classList.remove('edit-mode');
+    itemBeingEdited.remove();
+    checkUI();
+    // isEditMode = false;
   }
 
   //runs addItemToTheDOM function which adds the item to the DOM
@@ -78,8 +89,8 @@ function itemRemove(item) {
       true ? item.remove() : null;
       //     }
       //   checkUI();
+      removeItemFromLocaleStorage(item.textContent);
     }
-  removeItemFromLocaleStorage(item.textContent);
   checkUI();
 }
 removeItemFromLocaleStorage = (item) => {
@@ -130,6 +141,10 @@ const checkUI = () => {
     clearAll.style.display = 'block';
     filter.style.display = 'block';
   }
+  addbtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
+  addbtn.style.backgroundColor = '#333';
+  input.value = '';
+  isEditMode = false;
 };
 checkUI();
 //filtering the items
@@ -150,10 +165,26 @@ const filterItems = (e) => {
   });
 };
 
+isEditMode = false;
+updateItem = (e) => {
+  // console.log(e.target.parentElement.classList);
+  if (e.target.parentElement.classList.contains('items')) {
+    list.querySelectorAll('li').forEach((i) => i.classList.remove('edit-mode'));
+    const clickedItem = e.target;
+    input.value = e.target.textContent;
+    clickedItem.classList.add('edit-mode');
+    addbtn.style.backgroundColor = 'green';
+    addbtn.innerHTML = '<i class= "fa-solid fa-pen"></i> Update Item';
+    isEditMode = true;
+    console.log(isEditMode);
+  }
+};
+
 function init() {
   //Event Listeners
   form.addEventListener('submit', onSubmit);
   list.addEventListener('click', onClickItem);
+  list.addEventListener('click', updateItem);
   clearAll.addEventListener('click', clearAllItems);
   filter.addEventListener('input', filterItems);
   document.addEventListener('DOMContentLoaded', displayTheItems);
