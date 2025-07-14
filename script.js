@@ -16,8 +16,8 @@ const onSubmit = (e) => {
   e.preventDefault();
   const item = input.value;
 
-  if (item === '') {
-    alert('Please enter the Item');
+  if (item === ' ' || item === '') {
+    alert('Please enter the Item!');
     return;
   }
 
@@ -27,8 +27,13 @@ const onSubmit = (e) => {
     removeItemFromLocaleStorage(itemBeingEdited.textContent);
     itemBeingEdited.classList.remove('edit-mode');
     itemBeingEdited.remove();
-    checkUI();
-    // isEditMode = false;
+    // checkUI();
+    isEditMode = false;
+  } else {
+    if (checkIfItemExist(item)) {
+      alert('Item already exists!');
+      return;
+    }
   }
 
   //runs addItemToTheDOM function which adds the item to the DOM
@@ -85,7 +90,7 @@ function itemRemove(item) {
   // console.log(item);
   // console.log(e.target.classList.contains('fa-xmark'));
   if (item.parentElement.classList.contains('items'))
-    if (confirm('Are you Sure You want to remove this item?')) {
+    if (confirm('Are you sure You want to remove this item?')) {
       true ? item.remove() : null;
       //     }
       //   checkUI();
@@ -111,7 +116,7 @@ removeItemFromLocaleStorage = (item) => {
 const clearAll = document.querySelector('.btn-clear');
 const clearAllItems = (e) => {
   if (e.target.classList.contains('btn-clear')) {
-    list.innerHTML = ''; // Clear all items instead of removing the entire ul
+    list.innerHTML = ''; // Clear all items
     checkUI();
   }
   localStorage.clear();
@@ -179,7 +184,13 @@ updateItem = (e) => {
     console.log(isEditMode);
   }
 };
-
+function checkIfItemExist(itemp) {
+  let itemFromStorage = getItemsFromLocalStorage();
+  itemFromStorage = itemFromStorage.map((i) => i.toLowerCase());
+  itemp = itemp.toLowerCase();
+  console.log(itemFromStorage);
+  return itemFromStorage.includes(itemp);
+}
 function init() {
   //Event Listeners
   form.addEventListener('submit', onSubmit);

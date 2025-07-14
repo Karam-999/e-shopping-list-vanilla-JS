@@ -1,4 +1,4 @@
-# Shopping List (Vanilla JS)
+# E-Shopping List (Vanilla JS)
 
 A simple JavaScript project to add and remove items from a list using DOM manipulation and event handling.
 
