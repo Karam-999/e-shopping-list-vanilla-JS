@@ -115,11 +115,13 @@ removeItemFromLocaleStorage = (item) => {
 };
 const clearAll = document.querySelector('.btn-clear');
 const clearAllItems = (e) => {
-  if (e.target.classList.contains('btn-clear')) {
-    list.innerHTML = ''; // Clear all items
-    checkUI();
+  if (confirm('Are you sure You want to remove all items?')) {
+    if (e.target.classList.contains('btn-clear')) {
+      list.innerHTML = ''; // Clear all items
+      checkUI();
+    }
+    localStorage.clear();
   }
-  localStorage.clear();
 };
 
 const f2 = (classes) => {

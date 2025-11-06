@@ -21,7 +21,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  min-height: 100vh;
+  padding: 1.5rem 1rem;
+  gap: 1.5rem;
 }
 
 header {
@@ -37,8 +39,8 @@ header {
 } */
 
 .container {
-  max-width: 500px;
-  margin: 30px auto;
+  width: min(100%, 520px);
+  margin: 0 auto;
   padding: 20px;
 }
 
@@ -129,20 +131,23 @@ header {
 
 .items {
   margin-top: 20px;
-  width: 500px;
-  display: flex;
-  flex-wrap: wrap;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
 
 .items li {
   display: flex;
   justify-content: space-between;
-  width: 450px;
+  align-items: center;
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px 15px;
-  margin: 0 5px 20px;
+  margin: 0;
   font-weight: 700;
+  background: #fff;
 }
 .about {
   /* max-width: 700px; */
@@ -153,18 +158,17 @@ header {
   font-size: 0.95rem;
   line-height: 1.5;
   border: 1px solid var(--border);
-  margin-bottom: 3rem;
-  max-width: 500px;
-  margin: 30px auto;
+  width: min(100%, 520px);
+  margin: 0 auto 2rem;
   padding: 20px;
 }
 footer {
   text-align: center;
   font-size: 0.9rem;
   color: #888;
-  margin-top: 3rem;
-  max-width: 500px;
-  margin: 30px auto;
+  margin-top: 1rem;
+  width: min(100%, 520px);
+  margin: 0 auto 1.5rem;
   padding: 20px;
 }
 header h1 {
@@ -182,7 +186,43 @@ img {
   margin-right: 10px;
 }
 @media (max-width: 500px) {
-  .items li {
+  body {
+    padding: 1.25rem 0.8rem;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  header h1 {
+    font-size: 2rem;
+    margin-left: 0;
+  }
+
+  img {
+    margin: 0;
+  }
+
+  .btn,
+  .btn-clear {
     width: 100%;
+  }
+}
+
+@media (min-width: 600px) {
+  body {
+    padding: 2.5rem;
+  }
+
+  .items {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  body {
+    padding: 3rem 4rem;
   }
 }
